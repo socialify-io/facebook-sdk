@@ -12,13 +12,13 @@ public class FacebookClient {
     /// MARK: - Public variables
     
     public init() {
-        self.myDelegate = true ? MySession() : nil
-        self.session = URLSession(configuration: URLSessionConfiguration.default, delegate: myDelegate, delegateQueue: nil)
+        self.delegate = true ? Session() : nil
+        self.session = URLSession(configuration: URLSessionConfiguration.default, delegate: delegate, delegateQueue: nil)
     }
     
     public let LIBRARY_VERSION = "v0.0.1"
-    public var myDelegate: MySession?
-
+    
+    public var delegate: Session?
     public var session: URLSession?
     
     /// MARK: - Facebook Errors
@@ -26,14 +26,5 @@ public class FacebookClient {
     public enum FacebookError: Error {
         case ConnectionError
         case UnexpectedError
-    }
-}
-
-/// MARK: - Helper classes
-
-public class MySession: NSObject, URLSessionTaskDelegate {
-
-    public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
-        completionHandler(nil)
     }
 }
