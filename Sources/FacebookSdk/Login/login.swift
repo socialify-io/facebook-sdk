@@ -43,7 +43,6 @@ extension FacebookClient {
         // Preparing headers
         request.allHTTPHeaderFields = [
             "Cookie": "datr=QfbNYK0kA7zXWagrFbytAswt; sb=V_bNYEf2HisBhggP9qDT8fZL; dpr=2; locale=en_GB; wd=876x748; fr=1fj24NQhQ3bYG9HVz.AWVcO1tgdR19ey3Y8wc-RMkxYII.Bgzmbb.q4.AAA.0.0.Bgzmcy.AWXaBBYWli8",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
             "Content-Type": "application/x-www-form-urlencoded",
             "Upgrade-Insecure-Requests": "1",
             "Sec-Fetch-Site": "same-origin",
@@ -56,15 +55,22 @@ extension FacebookClient {
         ]
         
         // Send request
-        session?.dataTask(with: request) { (data, response, error) in
-            if let response = response as? HTTPURLResponse {
-                // Checking is logged in
-                if(response.statusCode == 302) {
-                    completion(.success(true))
-                } else {
-                    completion(.success(false))
+        self.makeRequest(request: request) { result in
+            switch result {
+            case .success(let result):
+                let response = result["response"]
+                if let response = response as? HTTPURLResponse {
+                    // Checking is logged in
+                    if(response.statusCode == 302) {
+                        completion(.success(true))
+                    } else {
+                        completion(.success(false))
+                    }
                 }
+            
+            case .failure(let error):
+                completion(.failure(error))
             }
-        }.resume()
+        }
     }
 }
