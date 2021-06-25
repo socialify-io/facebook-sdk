@@ -26,5 +26,7 @@ public class FacebookClient {
     public enum FacebookError: Error {
         case ConnectionError
         case UnexpectedError
+        case FacebookError
+        case ScrapperError
     }
 }
